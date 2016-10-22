@@ -1,0 +1,37 @@
+def ClearNode(n):
+    for c in n.children():
+        c.destroy()
+
+def CreateBox(obj, o, s, i):    
+    ## Create Geometry
+    position = hou.Vector2(0,i)
+    n = obj.createNode("geo")
+    ClearNode(n)
+    n.setPosition(position)
+    b = n.createNode("box")
+    
+    ## Scale
+    b.parm("sizex").set(s[0])
+    b.parm("sizey").set(s[1])
+    b.parm("sizez").set(s[2])
+    
+    ## Translate
+    b.parm("tx").set(o[0])
+    b.parm("ty").set(o[1])
+    b.parm("tz").set(o[2])
+    
+def ImportObstacles(filePath):
+    obj = hou.node('/obj')
+    f = open(filePath + '/obs.txt', 'r')
+    line = f.readline()
+    i = 1
+    while(line != ""):
+        sl = str.split(line)
+            
+        o = hou.Vector3((float(sl[0]),float(sl[2]),float(sl[1])))
+        s = hou.Vector3((float(sl[3]),float(sl[5]),float(sl[4])))
+        CreateBox(obj, o, s, i)
+            
+        i += 1
+        line = f.readline()
+    f.close()

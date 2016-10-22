@@ -1,0 +1,20 @@
+# This code is called when instances of this SOP cook.
+node = hou.pwd()
+geo = node.geometry()
+
+# Add code to modify the contents of geo.
+frame = int(hou.frame())
+filePath = hou.pwd().evalParm("filePath")
+f = open(filePath + '/data' + '%d' % (frame) + '.txt', 'r')
+line = f.readline()
+while(line != ""):
+    sl = str.split(line)
+    x = float(sl[0])
+    y = float(sl[2])
+    z = float(sl[1])
+    
+    point = geo.createPoint()
+    point.setPosition((x,y,z))
+        
+    line = f.readline()
+f.close()
